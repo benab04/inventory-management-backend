@@ -11,6 +11,8 @@ app.use(express.json());
 
 const PORT = process.env.PORT;
 const CONN_STRING = process.env.CONNECTION_STRING
+
+
 mongoose.connect(CONN_STRING).then(() => {
     console.log("Connected to Database");
 }).catch(error => {
@@ -19,6 +21,9 @@ mongoose.connect(CONN_STRING).then(() => {
 })
 
 
+app.get('/', (req, res) => {
+    res.send("Server is running");
+})
 
 app.use('/api', apiRoutes);
 

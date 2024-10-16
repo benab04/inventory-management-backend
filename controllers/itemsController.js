@@ -10,19 +10,24 @@ const getAllItems = async (req, res) => {
     }
 };
 
+
 const updateItem = async (req, res) => {
     try {
-        const item_id = req.params.id;
-        const new_item = req.body;
+        const item = await Item.findOne({ item_id: req.params.id });
+        if (!item) {
+            return res.status(404).json({ message: "Item not found" });
+        }
 
-        await Item.findOneAndUpdate({ item_id: item_id }, new_item)
-        res.status(200).json({ "Success": "Item updated successfully" });
+        // Update item fields with the incoming request body data
+        Object.assign(item, req.body);
 
+        // Save the updated item
+        const updatedItem = await item.save();
+        res.json(updatedItem);
     } catch (error) {
-        console.log("Error updating item", error);
-        res.status(500).json({ "Error": "Something went wrong" });
-
+        console.error("Error updating item:", error);
+        res.status(500).json({ message: "Server error" });
     }
-}
+};
 
 module.exports = { getAllItems, updateItem };

@@ -10,4 +10,19 @@ const getAllItems = async (req, res) => {
     }
 };
 
-module.exports = { getAllItems };
+const updateItem = async (req, res) => {
+    try {
+        const item_id = req.params.id;
+        const new_item = req.body;
+
+        await Item.findOneAndUpdate({ item_id: item_id }, new_item)
+        res.status(200).json({ "Success": "Item updated successfully" });
+
+    } catch (error) {
+        console.log("Error updating item", error);
+        res.status(500).json({ "Error": "Something went wrong" });
+
+    }
+}
+
+module.exports = { getAllItems, updateItem };
